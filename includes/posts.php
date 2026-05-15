@@ -29,21 +29,23 @@ $POSTS = [
   ],
   [
     'id' => 3, 'cat' => 'Engineering', 'author' => 'gideon', 'date' => '2015-10-30 11:20',
-    'title' => 'Internal Portal · Authentication Refactor (Tracking)',
-    'summary' => 'Tracking the rollout of refactored auth on the staff portal. Q4 milestones below.',
-    'body' => '<p>This is a tracking thread for the authentication subsystem refactor on the internal portal. Current milestones:</p>
+    'title' => 'Auth subsystem — open audit items',
+    'summary' => 'Tracking open Q3 audit items on the staff portal auth stack.',
+    'body' => '<p>Recording outstanding items from the Q3 audit on the staff portal authentication path. Owners listed.</p>
                <ul>
-                 <li>· October — credentials migrated from legacy LDAP to internal DB</li>
-                 <li>· October — JWT-based session tokens replace PHPSESSID</li>
-                 <li>· November — <strong>FIXME: switch md5() to password_verify()</strong> — Sam, are you on this?</li>
-                 <li>· December — rotate hardcoded JWT signing key, move to env</li>
+                 <li>· LDAP → internal DB migration — done (P. Gray)</li>
+                 <li>· Session tokens: PHPSESSID → JWT (HS256) — done (S.)</li>
+                 <li>· AUTH-117 — password storage hardening — open (S.)</li>
+                 <li>· AUTH-118 — comparison semantics — open, flagged twice by elliot (S.)</li>
+                 <li>· AUTH-201 — signing-key rotation to env — open (S.)</li>
                </ul>
-               <p>Comments on tickets, please. Loyalty above all.</p>',
+               <p>Please update tickets, not threads. Quiet quarter for the team — let\'s not earn a louder one.</p>
+               <p>— G. Goddard, AppSec</p>',
     'comments' => [
-      ['by' => 'sam',    'color' => 'amber', 'when' => '30 Oct · 11:45', 'body' => 'Will get to the password_verify migration after the audit. md5() with == comparison is "good enough" for shipping. Don\'t break anything.'],
-      ['by' => 'elliot', 'color' => 'green', 'when' => '30 Oct · 12:01', 'body' => 'sam, "==" is loose. There are inputs that defeat it entirely. Should be ===.'],
-      ['by' => 'sam',    'color' => 'amber', 'when' => '30 Oct · 12:18', 'body' => 'Noted. Backlog. Loyalty above all.'],
-      ['by' => 'tyrell', 'color' => 'red',   'when' => '30 Oct · 13:30', 'body' => 'Resolve this before end of quarter. No exceptions.'],
+      ['by' => 'elliot', 'color' => 'green', 'when' => '30 Oct · 12:01', 'body' => 'AUTH-118 — sent two specific inputs at the staging endpoint last week. Both got accepted as the same identity. The handler does what PHP says it does, not what we want it to do. That is the bug.'],
+      ['by' => 'samdev-evilcorp', 'color' => 'amber', 'when' => '30 Oct · 12:18', 'body' => 'Works as documented. PHP comparison semantics are a feature, not a bug. Closing the ticket end of week.'],
+      ['by' => 'elliot', 'color' => 'green', 'when' => '30 Oct · 12:34', 'body' => 'It is a feature in the same way a wide-open door is a feature. Reopen the ticket.'],
+      ['by' => 'tyrell', 'color' => 'red',   'when' => '30 Oct · 13:30', 'body' => 'Sam — AUTH-117, -118, AND -201. All three. By end of quarter. No exceptions.'],
     ],
   ],
   [
@@ -57,18 +59,20 @@ $POSTS = [
     ],
   ],
   [
-    'id' => 5, 'cat' => 'Notice', 'author' => 'darlene', 'date' => '2015-11-08 22:14',
-    'title' => 'Heads up — old portal repo got pulled',
-    'summary' => 'Sam pushed our pre-rotation portal source to his personal account before the migration. He pulled it down. You know how that goes.',
-    'body' => '<p>Going to keep this short. Sometime back in October, <strong>Sam</strong> apparently mirrored an early build of the staff portal up to his personal GitHub — the username is <code>samdev-evilcorp</code>. Repo was named something innocuous, "portal-internal" or similar.</p>
-               <p>Tyrell caught it during the rotation review. Sam force-pushed, marked the repo deleted, and assured everyone the history is "gone". The history is never gone. Anyone who looked at it during the window probably still has the commit references cached. If you didn\'t catch the early build, the metadata still resolves if you know where to look.</p>
-               <p>This is a courtesy reminder of policy IX/4 — internal source code, internal repositories. Loyalty above all.</p>
-               <blockquote>"The history is never gone." — D.</blockquote>',
+    'id' => 5, 'cat' => 'Notice', 'author' => 'tyrell', 'date' => '2015-11-08 22:14',
+    'title' => 'Reminder — internal source belongs internal',
+    'summary' => 'Quarterly reminder from compliance: internal code on internal repositories. Always.',
+    'body' => '<p>Brief from compliance.</p>
+               <p>Twice this quarter we have had staff push internal artefacts to personal accounts on public hosts. The most recent — mid-October — was scrubbed within the hour by the responsible party. Force-push is not a delete. By the time the listing came down, the repository, the commit objects, and the metadata had been cached elsewhere. Browsers cache. Search services cache. Mirrors cache. None of those are operated by us.</p>
+               <p>If you maintain a presence outside of E Corp infrastructure, that presence stays separate. <strong>Personal vanity handles — especially ones that include the company name — pair an account with internal artefacts the instant either becomes visible.</strong> The pattern is not subtle. Don\'t.</p>
+               <p>Where rotation has been applied to the codebase but not to the running infrastructure, the operational impact may persist longer than the published commit suggests. Owners of affected services have been notified.</p>
+               <blockquote>"What\'s published is public. There is no draft." — IX/4 §2.</blockquote>
+               <p>— T. Wellick</p>',
     'comments' => [
-      ['by' => 'tyrell', 'color' => 'red',   'when' => '08 Nov · 22:38', 'body' => 'Sam — you and I will speak tomorrow morning. 9 AM. My office. Bring everything.'],
-      ['by' => 'sam',    'color' => 'amber', 'when' => '08 Nov · 23:02', 'body' => 'The repo is GONE. I pulled it. It is empty. There is nothing to find. Please calm down.'],
-      ['by' => 'gideon', 'color' => 'green', 'when' => '09 Nov · 09:11', 'body' => 'Sam — "gone from the listing" is not "gone from the platform". Direct commit URLs continue to resolve. We have rotated the relevant secret in code but not in infra. This is a problem and you know it.'],
-      ['by' => 'darlene','color' => 'cyan',  'when' => '09 Nov · 14:55', 'body' => 'Quick search of his profile turns it up in under a minute. Whatever.'],
+      ['by' => 'gideon', 'color' => 'green', 'when' => '08 Nov · 22:55', 'body' => 'Tyrell — the October incident was reviewed and closed within the hour. Listing scrubbed, audit logged.'],
+      ['by' => 'darlene','color' => 'cyan',  'when' => '08 Nov · 23:08', 'body' => 'Scrubbed from the listing. Cute. The crawl is the crawl.'],
+      ['by' => 'samdev-evilcorp', 'color' => 'amber', 'when' => '09 Nov · 09:15', 'body' => 'Won\'t happen again. Apologies to the team. Lesson learned.'],
+      ['by' => 'tyrell', 'color' => 'red',   'when' => '09 Nov · 09:40', 'body' => '14:00. My office. Bring the laptop.'],
     ],
   ],
 ];
